@@ -18,7 +18,7 @@ public class MainView extends JFrame {
 	/**
 	 * Atribuo de tipo {@link MainView}
 	 */
-	public MainView init;
+	public InitialPanel init;
 
 	/**
 	 * Método público constructor de la clase
@@ -36,10 +36,10 @@ public class MainView extends JFrame {
 	}
 
 	/**
-	 * Mñetodo privado de tipo void para incializar los componentes.
+	 * Método privado de tipo void para incializar los componentes.
 	 */
 	private void initializeComponents() {
-		init = new MainView();
+		init = new InitialPanel();
 		getContentPane().add(init);
 	}
 
