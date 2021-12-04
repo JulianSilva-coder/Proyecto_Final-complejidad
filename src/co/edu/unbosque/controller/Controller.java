@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import co.edu.unbosque.model.Menu;
+import co.edu.unbosque.model.Nutricionista;
 import co.edu.unbosque.model.Rating;
-import co.edu.unbosque.view.MainView;
-import co.edu.unbosque.view.View;
+import co.edu.unbosque.model.Saltos_Conejo;
+import co.edu.unbosque.view.VistaConsola;
 
 /**
  * La clase Controller se encarga de la ejecuci√≥n del programa.
@@ -22,11 +24,7 @@ public class Controller {
 	/**
 	 * Instancia a la clase {@link MainView}
 	 */
-	private MainView window;
-	/**
-	 * Instancia a la clase {@link View}
-	 */
-	private View view;
+	private VistaConsola vistaConsola;
 	/**
 	 * Atributo privado de tipo int
 	 */
@@ -36,14 +34,46 @@ public class Controller {
 	 * M√©todo p√∫blico constructor de la clase
 	 */
 	public Controller() {
-		window = new MainView();
-		view = new View();
-		int teams = Integer.parseInt(view.scanS("N√∫mero de equipos"));
-		int referee = Integer.parseInt(view.scanS("N√∫mero de arbitros"));
+		vistaConsola = new VistaConsola();
+		int caso = Integer.parseInt(vistaConsola.scanS("Cual es el ejersicio que quieres ejecutar"));
+		
+		if(caso == 1) {
+			Menu[] menu;
+			try {
+			int tam = Integer.parseInt(vistaConsola.scanS("Cual es la cantidad comidas"));
+			while(tam<2) {
+				tam = Integer.parseInt(vistaConsola.scanS("El tamaÒo del del arreglo es muy pequeÒo"));
+			}
+			menu = new Menu[tam];
+			for (int i = 0; i < tam; i++) {
+				String comida = vistaConsola.scanS("NÛmbre de la Comida");
+				for (int j = 0; j < menu.length; j++) {
+					if (menu[j] != null) {
+						while (menu[j].getComida().equals(comida.toLowerCase())) {
+							vistaConsola.print("Ya existe ese nombre de la comida");
+							comida = vistaConsola.scanS("Ingrese nuevamente el nombre de la comida");
+							}
+						}
+					}
+				int cal = Integer.parseInt(vistaConsola.scanS("Cual es la cantidad de calorias de "+comida));
+				menu[i]= new Menu(comida.toLowerCase(), cal);
+				}
+			int cal = Integer.parseInt(vistaConsola.scanS("Cual es el n˙mero de calorias minimo"));
+			Nutricionista m_base = new Nutricionista(cal, menu.length);
+			Nutricionista m_opt = new Nutricionista(cal, menu.length);
+			vistaConsola.print("el menu Ûptimo es: "+m_base.realizarBackTracking(m_base, m_opt, false, menu));
+			}
+			catch(Exception e) {
+				vistaConsola.print("Algo pasÛ m·l");
+			}
+		}	
+		else if(caso == 2) {
+		int teams = Integer.parseInt(vistaConsola.scanS("N√∫mero de equipos"));
+		int referee = Integer.parseInt(vistaConsola.scanS("N√∫mero de arbitros"));
 		number = teams;
 
 		while (referee <= teams / 2) {
-			referee = Integer.parseInt(view.scanS("El valor no es mayor a la mitad de los equipos"));
+			referee = Integer.parseInt(vistaConsola.scanS("El valor no es mayor a la mitad de los equipos"));
 		}
 		int prefer[][] = new int[teams * 2][teams];
 		for (int a = 0; a < teams * 2; a++) {
@@ -65,7 +95,7 @@ public class Controller {
 			int[] selection = new int[referee];
 			for (int b = 0; b < referee; b++) {
 				rating.add(new Rating(b, a,
-						Integer.parseInt(view.scanS("Cual es el rating del equipo " + a + " del arbitro " + b))));
+						Integer.parseInt(vistaConsola.scanS("Cual es el rating del equipo " + a + " del arbitro " + b))));
 			}
 			Collections.sort(rating);
 			for (int c = 0; c < referee; c++) {
@@ -93,6 +123,30 @@ public class Controller {
 			System.out.println("");
 		}
 		preferences(prefer, teams - referee);
+		}
+		else if(caso == 3) {
+			int x, y, da, ce, a, b;
+			boolean solucion;
+			try {
+				vistaConsola.print("Posicion inicial del caballo.");
+				x = Integer.parseInt(vistaConsola.scanS("x="));
+				y = Integer.parseInt(vistaConsola.scanS("y="));
+				da = Integer.parseInt(vistaConsola.scanS("Movimientos orizontales"));
+				ce = Integer.parseInt(vistaConsola.scanS("Movimientos verticales"));
+				Saltos_Conejo miConejo = new Saltos_Conejo(x, y, da, ce);
+				a = Integer.parseInt(vistaConsola.scanS("x del destino"));
+				b = Integer.parseInt(vistaConsola.scanS("y del destino"));
+				solucion = miConejo.resolverProblema(a,b);
+				if (solucion) {
+					miConejo.escribirTablero();
+				}
+			} catch (Exception m) {
+				System.out.println("No se pudo probar el algoritmo, " + m);
+			}
+		}
+		else {
+			vistaConsola.print("No se escogiÛ un n˙mero adecuado");
+		}
 	}
 
 	/**

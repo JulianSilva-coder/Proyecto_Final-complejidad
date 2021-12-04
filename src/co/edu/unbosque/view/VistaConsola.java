@@ -11,7 +11,7 @@ import java.util.Scanner;
  * @author Diana Marcela Rios Gaviria
  * @author Juan Jose Navas Wittingham
  */
-public class View {
+public class VistaConsola {
 
 	/**
 	 * Atributo de tipo {@link Scanner}
@@ -21,7 +21,7 @@ public class View {
 	/**
 	 * Método público constructor de la clase
 	 */
-	public View() {
+	public VistaConsola() {
 		scan = new Scanner(System.in);
 	}
 
